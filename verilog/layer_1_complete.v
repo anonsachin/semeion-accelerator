@@ -48,6 +48,9 @@ module layer_1_complete(
     parameter OUTPUT_BUT_SIZE = 16;
     parameter SIZE = 8;
     parameter SIGN_BIT_SIZE = 4;
+    parameter BIAS_SIZE = 8;
+    parameter BIAS_DATA_LOCATION = "C:/Users/sachi/Downloads/bias_12.mem";
+    parameter WEIGHT_DATA_LOCATION = "C:/Users/sachi/Downloads/weight_12.mem";
     
     input load, clk, reset;
     input [LAYER_1_INPUT_SIZE -1:0] layer_1_input;
@@ -121,7 +124,7 @@ module layer_1_complete(
     
     // multiply
     
-    Layer_1_matrix_multiply #(.LAYER_1_INPUT_SIZE(LAYER_1_INPUT_SIZE),.OUTPUT_BUT_SIZE(OUTPUT_BUT_SIZE), .SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE)) dut (.layer_1_input(layer_1_input), .load(load), .clk(clk), .reset(reset), .done(done),
+    Layer_1_matrix_multiply #(.LAYER_1_INPUT_SIZE(LAYER_1_INPUT_SIZE),.OUTPUT_BUT_SIZE(OUTPUT_BUT_SIZE), .SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .WEIGHT_DATA_LOCATION(WEIGHT_DATA_LOCATION)) dut (.layer_1_input(layer_1_input), .load(load), .clk(clk), .reset(reset), .done(done),
     .layer_1_output_1(layer_1_output_1),
     .layer_1_output_2(layer_1_output_2),
     .layer_1_output_3(layer_1_output_3),
@@ -144,8 +147,8 @@ module layer_1_complete(
     .layer_1_output_20(layer_1_output_20));
 
     // add bias
-
-    layer_1_bias_add #(.SIZE(OUTPUT_BUT_SIZE),.SIGN_BIT_SIZE(SIGN_BIT_SIZE)) dut1(
+    // BIAS_SIZE and SIGN_BIT_SIZE is extra bits required for the bias data
+    layer_1_bias_add #(.SIZE(OUTPUT_BUT_SIZE),.SIGN_BIT_SIZE(SIGN_BIT_SIZE), .BIAS_SIZE(BIAS_SIZE), .BIAS_DATA_LOCATION(BIAS_DATA_LOCATION)) dut1(
     .layer_1_input_1(layer_1_output_1),
     .layer_1_input_2(layer_1_output_2),
     .layer_1_input_3(layer_1_output_3),
@@ -189,7 +192,10 @@ module layer_1_complete(
     .layer_1_output_20(layer_1_output_bias_20));
     
     // add leaky layer
-    layer_1_leaky_relu #(.SIZE(2*SIZE),.SIGN_BIT_SIZE(2*SIGN_BIT_SIZE)) dut2 (
+    // SIZE is to specify the size of the incoming bits and
+    // SIGN_BIT_SIZE is the number of bits in this which are sign for 
+    // correct calculations.
+    layer_1_leaky_relu #(.SIZE(OUTPUT_BUT_SIZE),.SIGN_BIT_SIZE(2*SIGN_BIT_SIZE)) dut2 (
      .layer_1_input_1(layer_1_output_bias_1),
     .layer_1_input_2(layer_1_output_bias_2),
     .layer_1_input_3(layer_1_output_bias_3),

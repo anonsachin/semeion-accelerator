@@ -123,26 +123,26 @@ module layer_1_bias_add(
     always @(posedge clk) begin
         if (reset) begin
             done <= 0;
-            layer_1_output_1 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[0][BIAS_SIZE-1]}},biases[0],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_2 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[1][BIAS_SIZE-1]}},biases[1],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_3 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[2][BIAS_SIZE-1]}},biases[2],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_4 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[3][BIAS_SIZE-1]}},biases[3],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_5 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[4][BIAS_SIZE-1]}},biases[4],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_6 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[5][BIAS_SIZE-1]}},biases[5],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_7 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[6][BIAS_SIZE-1]}},biases[6],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_8 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[7][BIAS_SIZE-1]}},biases[7],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_9 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[8][BIAS_SIZE-1]}},biases[8],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_10 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[9][BIAS_SIZE-1]}},biases[9],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_11 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[10][BIAS_SIZE-1]}},biases[10],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_12 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[11][BIAS_SIZE-1]}},biases[11],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_13 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[12][BIAS_SIZE-1]}},biases[12],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_14 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[13][BIAS_SIZE-1]}},biases[13],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_15 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[14][BIAS_SIZE-1]}},biases[14],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_16 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[15][BIAS_SIZE-1]}},biases[15],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_17 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[16][BIAS_SIZE-1]}},biases[16],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_18 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[17][BIAS_SIZE-1]}},biases[17],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_19 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[18][BIAS_SIZE-1]}},biases[18],{SIGN_BIT_SIZE{1'b0}}};
-            layer_1_output_20 <= {{BIAS_SIZE-SIGN_BIT_SIZE{biases[19][BIAS_SIZE-1]}},biases[19],{SIGN_BIT_SIZE{1'b0}}};
+            layer_1_output_1 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[0][BIAS_SIZE-1]}},biases[0],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_2 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[1][BIAS_SIZE-1]}},biases[1],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_3 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[2][BIAS_SIZE-1]}},biases[2],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_4 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[3][BIAS_SIZE-1]}},biases[3],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_5 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[4][BIAS_SIZE-1]}},biases[4],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_6 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[5][BIAS_SIZE-1]}},biases[5],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_7 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[6][BIAS_SIZE-1]}},biases[6],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_8 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[7][BIAS_SIZE-1]}},biases[7],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_9 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[8][BIAS_SIZE-1]}},biases[8],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_10 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[9][BIAS_SIZE-1]}},biases[9],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_11 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[10][BIAS_SIZE-1]}},biases[10],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_12 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[11][BIAS_SIZE-1]}},biases[11],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_13 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[12][BIAS_SIZE-1]}},biases[12],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_14 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[13][BIAS_SIZE-1]}},biases[13],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_15 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[14][BIAS_SIZE-1]}},biases[14],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_16 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[15][BIAS_SIZE-1]}},biases[15],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_17 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[16][BIAS_SIZE-1]}},biases[16],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_18 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[17][BIAS_SIZE-1]}},biases[17],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_19 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[18][BIAS_SIZE-1]}},biases[18],{(SIGN_BIT_SIZE-4){1'b0}}};
+            layer_1_output_20 <= {{SIZE-(BIAS_SIZE+SIGN_BIT_SIZE-4){biases[19][BIAS_SIZE-1]}},biases[19],{(SIGN_BIT_SIZE-4){1'b0}}};
         
         end else begin
             if (load) begin

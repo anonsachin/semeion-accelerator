@@ -26,14 +26,15 @@ module layer_1_5_multiply(
     
     parameter SIZE = 8;
     parameter SIGN_BIT_SIZE = 4;
+    parameter OUTPUT_SIZE = 16;
      // port setup
      input [SIZE -1:0]  vector_input_1, vector_input_2, vector_input_3, vector_input_4, vector_input_5;
      input mask_input, accumulate, clk, load, reset;
-     output reg [2*SIZE -1 :0]  accumulate_1, accumulate_2, accumulate_3, accumulate_4, accumulate_5;
+     output reg [OUTPUT_SIZE -1 :0]  accumulate_1, accumulate_2, accumulate_3, accumulate_4, accumulate_5;
      output accumulate_signal;
      
       // intermediate signals
-     wire [2*SIZE -1 :0]  accumulate_1_w, accumulate_2_w, accumulate_3_w, accumulate_4_w, accumulate_5_w;
+     wire [OUTPUT_SIZE -1 :0]  accumulate_1_w, accumulate_2_w, accumulate_3_w, accumulate_4_w, accumulate_5_w;
      reg [SIZE -1:0]  vector_input_1_reg, vector_input_2_reg, vector_input_3_reg, vector_input_4_reg, vector_input_5_reg;
      reg mask_input_reg ,accumulate_reg;
      
@@ -76,11 +77,11 @@ module layer_1_5_multiply(
 //    single_bit_multiply #(.SIZE(SIZE)) m5 (.multiplier(vector_input_5_reg), .multiplicand(mask_input_reg), .product(accumulate_5_w) );
     
     // a multiply by 1 in fixed point representation
-    assign accumulate_1_w = mask_input_reg ? {{SIZE-SIGN_BIT_SIZE{vector_input_1_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
-    assign accumulate_2_w = mask_input_reg ? {{SIZE-SIGN_BIT_SIZE{vector_input_2_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
-    assign accumulate_3_w = mask_input_reg ? {{SIZE-SIGN_BIT_SIZE{vector_input_3_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
-    assign accumulate_4_w = mask_input_reg ? {{SIZE-SIGN_BIT_SIZE{vector_input_4_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
-    assign accumulate_5_w = mask_input_reg ? {{SIZE-SIGN_BIT_SIZE{vector_input_5_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
+    assign accumulate_1_w = mask_input_reg ? {{OUTPUT_SIZE-(SIZE+SIGN_BIT_SIZE){vector_input_1_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
+    assign accumulate_2_w = mask_input_reg ? {{OUTPUT_SIZE-(SIZE+SIGN_BIT_SIZE){vector_input_2_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
+    assign accumulate_3_w = mask_input_reg ? {{OUTPUT_SIZE-(SIZE+SIGN_BIT_SIZE){vector_input_3_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
+    assign accumulate_4_w = mask_input_reg ? {{OUTPUT_SIZE-(SIZE+SIGN_BIT_SIZE){vector_input_4_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
+    assign accumulate_5_w = mask_input_reg ? {{OUTPUT_SIZE-(SIZE+SIGN_BIT_SIZE){vector_input_5_reg[SIZE-1]}},vector_input_1_reg,{SIGN_BIT_SIZE{1'b0}}} : 0;
     
     assign accumulate_signal = accumulate_reg;
     

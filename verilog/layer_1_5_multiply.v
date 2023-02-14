@@ -33,7 +33,7 @@ module layer_1_5_multiply(
      output accumulate_signal;
      
       // intermediate signals
-     wire [SIZE -1 :0]  accumulate_1_w, accumulate_2_w, accumulate_3_w, accumulate_4_w, accumulate_5_w;
+     wire [2*SIZE -1 :0]  accumulate_1_w, accumulate_2_w, accumulate_3_w, accumulate_4_w, accumulate_5_w;
      reg [SIZE -1:0]  vector_input_1_reg, vector_input_2_reg, vector_input_3_reg, vector_input_4_reg, vector_input_5_reg;
      reg mask_input_reg ,accumulate_reg;
      
@@ -103,11 +103,11 @@ module layer_1_5_multiply(
          end else begin
             if (accumulate_reg)begin
             // THE 8 bit numbers are sign extended
-                accumulate_1 <= accumulate_1 + {{SIZE{accumulate_1_w[SIZE-1]}},accumulate_1_w};
-                accumulate_2 <= accumulate_2 + {{SIZE{accumulate_2_w[SIZE-1]}},accumulate_2_w};
-                accumulate_3 <= accumulate_3 + {{SIZE{accumulate_3_w[SIZE-1]}},accumulate_3_w};
-                accumulate_4 <= accumulate_4 + {{SIZE{accumulate_4_w[SIZE-1]}},accumulate_4_w};
-                accumulate_5 <= accumulate_5 + {{SIZE{accumulate_5_w[SIZE-1]}},accumulate_5_w};
+                accumulate_1 <= accumulate_1 + {accumulate_1_w};
+                accumulate_2 <= accumulate_2 + {accumulate_2_w};
+                accumulate_3 <= accumulate_3 + {accumulate_3_w};
+                accumulate_4 <= accumulate_4 + {accumulate_4_w};
+                accumulate_5 <= accumulate_5 + {accumulate_5_w};
             end else begin
                 accumulate_1 <= accumulate_1;
                 accumulate_2 <= accumulate_2;

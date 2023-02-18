@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 14.02.2023 23:45:02
+// Create Date: 14.02.2023 16:04:50
 // Design Name: 
-// Module Name: full_neural_network_v1
+// Module Name: Layer_2_interface_layer_1_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,13 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module full_neural_network_v1(
-    layer_1_input,
-    load, clk, reset,
-    done, max
+module Layer_2_interface_layer_1_tb(
+
     );
     
-    parameter LAYER_1_INPUT_SIZE = 256;
+     parameter LAYER_1_INPUT_SIZE = 256;
     parameter OUTPUT_BUT_SIZE = 16;
     parameter SIZE = 8;
     parameter SIGN_BIT_SIZE = 4;
@@ -49,8 +47,8 @@ module full_neural_network_v1(
     // max
     parameter MAX_INPUT_SIZE = 2*(LEAKY_LAYER_SIZE+WEIGHT_SIZE)+1;
     
-    input load, clk, reset;
-    input [LAYER_1_INPUT_SIZE -1:0] layer_1_input;
+    reg load, clk, reset;
+    reg [LAYER_1_INPUT_SIZE -1:0] layer_1_input;
 
     // leaky
     wire [2*OUTPUT_BUT_SIZE-1:0] layer_1_output_leaky_1, layer_1_output_leaky_2,
@@ -74,8 +72,8 @@ module full_neural_network_v1(
     layer_1_output_leaky_20;
     
     wire done_complete, done_complete_2;
-    output done;
-    output [3:0] max;
+    wire done;
+    wire [3:0] max;
     // leaky output
     wire [2*(LEAKY_LAYER_SIZE+WEIGHT_SIZE):0] layer_2_output_leaky_1, layer_2_output_leaky_2, 
     layer_2_output_leaky_3,
@@ -86,12 +84,6 @@ module full_neural_network_v1(
     layer_2_output_leaky_8,
     layer_2_output_leaky_9,
     layer_2_output_leaky_10;
-    
-    // fsm signals
-    wire start;
-    
-    // control fsm
-    control_state control_fsm (.clk(clk),.reset(reset),.load(load),.start(start),.done(done_complete));
     
     // complete layer 1 
     layer_1_complete #(.LAYER_1_INPUT_SIZE(LAYER_1_INPUT_SIZE), .OUTPUT_BUT_SIZE(OUTPUT_BUT_SIZE), .SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .BIAS_SIZE(BIAS_SIZE_L1), .BIAS_DATA_LOCATION(BIAS_DATA_LOCATION_L1), .WEIGHT_DATA_LOCATION(WEIGHT_DATA_LOCATION_L1)) l1 (layer_1_input, load, clk, reset, done_complete, layer_1_output_leaky_1, layer_1_output_leaky_2,
@@ -164,44 +156,39 @@ module full_neural_network_v1(
     max
     );
     
-endmodule
-
-module control_state(clk,reset,load,done,start);
+    // image data
+    reg [265:0] images [0:9];
+    reg [265:0] data;
     
-    input clk, reset, load, done;
-    output reg  start;
+    //l2 weigth
+     // weights
+    reg [WEIGHT_SIZE-1:0] weights [0:9][0:19];
     
-    reg [1:0] next_state;
-    // state
-    parameter S0 = 2'b01;
-    parameter S1 = 2'b11;
-    parameter S2 = 2'b10;
-    
-    always@(posedge clk)begin
-    
-    if (reset) begin
-        next_state <= S0;
-    end else begin
-        case(next_state)
-        S0:begin
-            next_state <= load ? S1 : S0;
-            start <= 0;
-        end
-        S1:begin
-            next_state <= S2;
-            start <= 1;
-        end
-        S2:begin
-            next_state <= done ? S1 : S0;
-            start <= 0;
-        end
-        default:begin
-            next_state <= S0;
-            start <= 0;
-        end
-        endcase
+    initial
+    begin 
+    $readmemb(WEIGHT_DATA_LOCATION,weights);
     end
+    
+    always
+    #5 clk = ~clk;
+    
+    initial
+    begin
+    $readmemb("C:/Users/sachi/playground/tabtonone/image_data.mem",images);
+    data <= images[4];
+    layer_1_input <= 0;
+    clk <= 1;
+    reset <= 1;
+    load <= 0;
+    
+    #8 reset <= 0;
+    
+    #10 
+    layer_1_input <= data[265:10];
+    load <= 1;
+    
+    #10 load <= 0;
+    #3000 $finish;
     end
-   
-
+    
 endmodule

@@ -162,7 +162,7 @@ module Layer_2_interface_layer_1_tb(
     
     //l2 weigth
      // weights
-    reg [WEIGHT_SIZE-1:0] weights [0:9][0:19];
+    reg [WEIGHT_SIZE-1:0] weights [0:10*20-1];
     
     initial
     begin 

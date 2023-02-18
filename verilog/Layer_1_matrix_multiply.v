@@ -73,7 +73,7 @@ module Layer_1_matrix_multiply(
     layer_1_output_20;
     
     // martix weights
-    reg [SIZE - 1:0] weights [0:19][0:LAYER_1_INPUT_SIZE-1];
+    reg [SIZE - 1:0] weights [0:20*LAYER_1_INPUT_SIZE-1];
     
     // address and control lines
     wire [$clog2(LAYER_1_INPUT_SIZE)-1:0] addr;
@@ -99,7 +99,7 @@ module Layer_1_matrix_multiply(
     end
     
     // counter for address and valid signal during counting
-    counter_with_valid #(.LIMIT(LAYER_1_INPUT_SIZE)) addr_count(.clk(clk), .count(addr), .reset(reset), .load(load), .valid(valid));
+    counter_with_valid #(.LIMIT(LAYER_1_INPUT_SIZE-1)) addr_count(.clk(clk), .count(addr), .reset(reset), .load(load), .valid(valid));
     
     // shifted input msb assigned as mask
     shift_n_bit_synchronous_left #(.SIZE(LAYER_1_INPUT_SIZE)) SHIFT1 (.shift_input(layer_1_input), .shift_output(shift_out), .clk(clk), .reset(reset), .load(load));
@@ -107,27 +107,27 @@ module Layer_1_matrix_multiply(
     
     // single bit multiplier
     
-    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l1 (.vector_input_1(weights[0][addr]), 
-    .vector_input_2((weights[1][addr])), .vector_input_3(weights[2][addr]), .vector_input_4(weights[3][addr]), 
-    .vector_input_5(weights[4][addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
+    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l1 (.vector_input_1(weights[0*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_2((weights[1*LAYER_1_INPUT_SIZE+addr])), .vector_input_3(weights[2*LAYER_1_INPUT_SIZE+addr]), .vector_input_4(weights[3*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_5(weights[4*LAYER_1_INPUT_SIZE+addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
     .accumulate_1(layer_1_output_1), .accumulate_2(layer_1_output_2), .accumulate_3(layer_1_output_3), .accumulate_4(layer_1_output_4), .accumulate_5(layer_1_output_5),
     .accumulate_signal(valid_out[0]));
     
-    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l2 (.vector_input_1(weights[5][addr]), 
-    .vector_input_2((weights[6][addr])), .vector_input_3(weights[7][addr]), .vector_input_4(weights[8][addr]), 
-    .vector_input_5(weights[9][addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
+    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l2 (.vector_input_1(weights[5*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_2((weights[6*LAYER_1_INPUT_SIZE+addr])), .vector_input_3(weights[7*LAYER_1_INPUT_SIZE+addr]), .vector_input_4(weights[8*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_5(weights[9*LAYER_1_INPUT_SIZE+addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
     .accumulate_1(layer_1_output_6), .accumulate_2(layer_1_output_7), .accumulate_3(layer_1_output_8), .accumulate_4(layer_1_output_9), .accumulate_5(layer_1_output_10),
     .accumulate_signal(valid_out[1]));
     
-    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l3 (.vector_input_1(weights[10][addr]), 
-    .vector_input_2((weights[11][addr])), .vector_input_3(weights[12][addr]), .vector_input_4(weights[13][addr]), 
-    .vector_input_5(weights[14][addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
+    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l3 (.vector_input_1(weights[10*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_2((weights[11*LAYER_1_INPUT_SIZE+addr])), .vector_input_3(weights[12*LAYER_1_INPUT_SIZE+addr]), .vector_input_4(weights[13*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_5(weights[14*LAYER_1_INPUT_SIZE+addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
     .accumulate_1(layer_1_output_11), .accumulate_2(layer_1_output_12), .accumulate_3(layer_1_output_13), .accumulate_4(layer_1_output_14), .accumulate_5(layer_1_output_15),
     .accumulate_signal(valid_out[2]));
     
-    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l4 (.vector_input_1(weights[15][addr]), 
-    .vector_input_2((weights[16][addr])), .vector_input_3(weights[17][addr]), .vector_input_4(weights[18][addr]), 
-    .vector_input_5(weights[19][addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
+    layer_1_5_multiply #(.SIZE(SIZE), .SIGN_BIT_SIZE(SIGN_BIT_SIZE), .OUTPUT_SIZE(2*SIZE)) l4 (.vector_input_1(weights[15*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_2((weights[16*LAYER_1_INPUT_SIZE+addr])), .vector_input_3(weights[17*LAYER_1_INPUT_SIZE+addr]), .vector_input_4(weights[18*LAYER_1_INPUT_SIZE+addr]), 
+    .vector_input_5(weights[19*LAYER_1_INPUT_SIZE+addr]), .mask_input(mask), .clk(clk), .load(valid), .reset(reset), .accumulate(valid), 
     .accumulate_1(layer_1_output_16), .accumulate_2(layer_1_output_17), .accumulate_3(layer_1_output_18), .accumulate_4(layer_1_output_19), .accumulate_5(layer_1_output_20),
     .accumulate_signal(valid_out[3]));
     

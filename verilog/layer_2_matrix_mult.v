@@ -55,6 +55,7 @@ module layer_2_matrix_mult(
     parameter WEIGHT_SIZE = 8;
     parameter WEIGHT_DATA_LOCATION = "C:/Users/sachi/Downloads/weight_23.mem";
     parameter INPUT_VECTOR_SIZE = 20;
+    parameter NUMBER_OF_ROWS = 10;
     
     input load, clk, reset;
     output reg done;
@@ -108,7 +109,7 @@ module layer_2_matrix_mult(
     wire [$clog2(INPUT_VECTOR_SIZE):0] addr;
     
     // weights
-    reg [WEIGHT_SIZE-1:0] weights [0:9][0:19];
+    reg [WEIGHT_SIZE-1:0] weights [0:10*INPUT_VECTOR_SIZE-1];
     
     initial
     begin 
@@ -189,18 +190,18 @@ module layer_2_matrix_mult(
     end
     
     // counter for address and valid signal during counting
-    counter #(.LIMIT(INPUT_VECTOR_SIZE)) addr_count(.clk(clk), .count(addr), .reset(load_reg), .valid(valid));
+    counter #(.LIMIT(INPUT_VECTOR_SIZE-1)) addr_count(.clk(clk), .count(addr), .reset(load_reg), .valid(valid));
     
     
     // vector multiply
-    layer_2_5_multiply #(.VECTOR_SIZE(WEIGHT_SIZE), .MULTIPLIER_SIZE(LEAKY_LAYER_SIZE)) l1 (.vector_input_1(weights[0][addr]), 
-    .vector_input_2((weights[1][addr])), .vector_input_3(weights[2][addr]), .vector_input_4(weights[3][addr]), 
-    .vector_input_5(weights[4][addr]), .multiply_input(leaky_store[addr]), .clk(clk), .load(valid), .reset(reset|load_reg), .accumulate(valid), 
+    layer_2_5_multiply #(.VECTOR_SIZE(WEIGHT_SIZE), .MULTIPLIER_SIZE(LEAKY_LAYER_SIZE)) l1 (.vector_input_1(weights[0*INPUT_VECTOR_SIZE+addr]), 
+    .vector_input_2((weights[1*INPUT_VECTOR_SIZE+addr])), .vector_input_3(weights[2*INPUT_VECTOR_SIZE+addr]), .vector_input_4(weights[3*INPUT_VECTOR_SIZE+addr]), 
+    .vector_input_5(weights[4*INPUT_VECTOR_SIZE+addr]), .multiply_input(leaky_store[addr]), .clk(clk), .load(valid), .reset(reset|load_reg), .accumulate(valid), 
     .accumulate_1(layer_2_output_1_w), .accumulate_2(layer_2_output_2_w), .accumulate_3(layer_2_output_3_w), .accumulate_4(layer_2_output_4_w), .accumulate_5(layer_2_output_5_w),
     .accumulate_signal(valid_out[0]));
-    layer_2_5_multiply #(.VECTOR_SIZE(WEIGHT_SIZE), .MULTIPLIER_SIZE(LEAKY_LAYER_SIZE)) l2 (.vector_input_1(weights[5][addr]), 
-    .vector_input_2((weights[6][addr])), .vector_input_3(weights[7][addr]), .vector_input_4(weights[8][addr]), 
-    .vector_input_5(weights[9][addr]), .multiply_input(leaky_store[addr]), .clk(clk), .load(valid), .reset(reset|load_reg), .accumulate(valid), 
+    layer_2_5_multiply #(.VECTOR_SIZE(WEIGHT_SIZE), .MULTIPLIER_SIZE(LEAKY_LAYER_SIZE)) l2 (.vector_input_1(weights[5*INPUT_VECTOR_SIZE+addr]), 
+    .vector_input_2((weights[6*INPUT_VECTOR_SIZE+addr])), .vector_input_3(weights[7*INPUT_VECTOR_SIZE+addr]), .vector_input_4(weights[8*INPUT_VECTOR_SIZE+addr]), 
+    .vector_input_5(weights[9*INPUT_VECTOR_SIZE+addr]), .multiply_input(leaky_store[addr]), .clk(clk), .load(valid), .reset(reset|load_reg), .accumulate(valid), 
     .accumulate_1(layer_2_output_6_w), .accumulate_2(layer_2_output_7_w), .accumulate_3(layer_2_output_8_w), .accumulate_4(layer_2_output_9_w), .accumulate_5(layer_2_output_10_w),
     .accumulate_signal(valid_out[1]));
     
